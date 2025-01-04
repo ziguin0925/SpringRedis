@@ -38,5 +38,9 @@ out/
 
 
 ### 설정 파일 ###
-**/application.yaml
+**/application-core.yml
+**/application-coupon-api.yml
+**/application-consumer.yml
+**/application-waiting.yml
+
 **/docker-compose.yml

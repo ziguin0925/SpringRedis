@@ -22,5 +22,10 @@ Redis 기본 지식 공부
     <개선 할만한 사항>
     - 주기적으로 대기시간을 체크하지않고 서버에서 직접 응답하기
     - 대기 시간을 계산하여 사용자에게 보여주기
-    
+
+---
+
+2. 선착순 쿠폰 발급 시스템
+
+   coupon-core모듈은 coupon-api, coupon-consumer에서 import하기 때문에 coupon-core의 main메서드 클래스를 삭제함.
 

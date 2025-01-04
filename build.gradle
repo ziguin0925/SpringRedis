@@ -17,6 +17,7 @@ subprojects {
     // 모든 서브프로젝트에 공통 적용
     apply plugin: "java"
     apply plugin: "io.spring.dependency-management"
+    apply plugin: "org.springframework.boot"
 
     java {
         toolchain {
@@ -27,8 +28,16 @@ subprojects {
     // 공통 의존성
     dependencies {
         // Lombok
+        implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+        implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+        implementation("mysql:mysql-connector-java:8.0.33")
+        implementation 'org.springframework.boot:spring-boot-starter'
+
+        runtimeOnly("com.h2database:h2")
+
         compileOnly "org.projectlombok:lombok"
         annotationProcessor "org.projectlombok:lombok"
+
 
         // 공통 테스트
         testImplementation "org.springframework.boot:spring-boot-starter-test"
