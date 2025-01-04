@@ -1,42 +1,37 @@
 plugins {
-    id 'java'
-    id 'org.springframework.boot' version '3.4.1'
-    id 'io.spring.dependency-management' version '1.1.7'
+    // “정의만” 해두고 필요 시 서브프로젝트에서 apply
+    id("org.springframework.boot") version "3.4.1" apply false
+    id("io.spring.dependency-management") version "1.1.7" apply false
 }
 
-group = 'org.example'
-version = '0.0.1-SNAPSHOT'
+allprojects {
+    group = "org.example"
+    version = "0.0.1-SNAPSHOT"
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+    repositories {
+        mavenCentral()
     }
 }
 
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
+subprojects {
+    // 모든 서브프로젝트에 공통 적용
+    apply plugin: "java"
+    apply plugin: "io.spring.dependency-management"
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
     }
-}
 
-repositories {
-    mavenCentral()
-}
+    // 공통 의존성
+    dependencies {
+        // Lombok
+        compileOnly "org.projectlombok:lombok"
+        annotationProcessor "org.projectlombok:lombok"
 
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    compileOnly 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'io.projectreactor:reactor-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    testImplementation 'com.github.codemonstur:embedded-redis:1.0.0'
-}
-
-tasks.named('test') {
-    useJUnitPlatform()
+        // 공통 테스트
+        testImplementation "org.springframework.boot:spring-boot-starter-test"
+        testImplementation "io.projectreactor:reactor-test"
+    }
 }

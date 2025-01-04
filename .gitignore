@@ -39,3 +39,4 @@ out/
 
 ### 설정 파일 ###
 **/application.yaml
+**/docker-compose.yml
