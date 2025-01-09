@@ -40,6 +40,8 @@ Docker 기본 지식 공부
    2. Redis를 통한 선착순 쿠폰 발급 로직 작성
    3. 쿠폰 발급 동시성 문제(순차적 처리) -> Lock 적용
       - synchronized키워드는 자바에 종속적, 여러 서버로 확장이 되는 순간 lock이 제대로 동작되지 않음.(lock획득을 트랜잭션 시작 전에,lock 반납을 트랜잭션 커밋 후에)
+      - Redisson을 이용한 lock 로직 구현(lockName으로 lock을 검)
+      - MySQL for update를 통한 **record lock** 사용 (x-lock) : @Lock(LockModeType.PESSIMISTIC_WRITE)
 
    docker 환경에서 locust를 통한 local 백엔드 서버의 부하 테스트 진행.
    - ``` docker-compose up -d --scale worker= [n] ```을 통해 각 worker container에 locust cpu 사용량 분담.

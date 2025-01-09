@@ -36,9 +36,9 @@ public class CouponIssueRequestService {
 //        }
 
         // Redis Lock
-        distributeLockExecutor.exceute("lock_"+requestDto.couponId(),10000,10000,()->{
+//        distributeLockExecutor.exceute("lock_"+requestDto.couponId(),10000,10000,()->{
             couponIssueService.issue(requestDto.couponId(), requestDto.userId());
-        });
+//        });
 
         log.info("쿠폰 발급 완료. couponId: {%s}, userId: {%s}".formatted(requestDto.couponId(), requestDto.userId()));
     }
