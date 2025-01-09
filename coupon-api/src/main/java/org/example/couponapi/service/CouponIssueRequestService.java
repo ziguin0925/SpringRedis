@@ -12,8 +12,27 @@ import org.springframework.stereotype.Service;
 public class CouponIssueRequestService {
     private final CouponIssueService couponIssueService;
 
+
+     /*
+    * lock획득
+    *
+    * 트랜잭션 시작
+    *
+    * coupon.issue()
+    * saveCouponIssue()
+    *
+    * 트랜잭션 커밋
+    *
+    * lock 반납
+    *
+    * 1번 요청
+    *
+    * */
     public void issueRequestV1(CouponIssueRequestDto requestDto){
-        couponIssueService.issue(requestDto.couponId(), requestDto.userId());
+        // synchronized - 자바에 종속, 여러 서버로 확장이 되는 순간 lock이 제대로 동작되지 않음.
+        synchronized (this){
+            couponIssueService.issue(requestDto.couponId(), requestDto.userId());
+        }
         log.info("쿠폰 발급 완료. couponId: {%s}, userId: {%s}".formatted(requestDto.couponId(), requestDto.userId()));
     }
 

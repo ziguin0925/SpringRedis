@@ -1,10 +1,15 @@
 # Redis 백엔드 코드 공부
 
 Redis 기본 지식 공부
+- [Notion - Redis Study](https://foremost-pan-f9f.notion.site/Redis-1192741377c780d5848dd7302bd4cdf2?pvs=4)
 
-[Notion - Redis Study](https://foremost-pan-f9f.notion.site/Redis-1192741377c780d5848dd7302bd4cdf2?pvs=4)
 
+Docker 기본 지식 공부
+- [Notion - Redis Study](https://foremost-pan-f9f.notion.site/Docker-1182741377c780b683cccba26f134590?pvs=4)
+
+---
 1. 접속자 대기열 시스템
+
     사용자가 target홈페이지를 접속할 때 대기 페이지에서 대기를 하다가 허용이 되면 target홈페이지로 접속하는 서비스 작성.
 
     - 비동기 처리를 통해 대량의 요청에 대응하기 위한 Webflux사용 
@@ -29,3 +34,12 @@ Redis 기본 지식 공부
 
    coupon-core모듈은 coupon-api, coupon-consumer에서 import하기 때문에 coupon-core의 main메서드 클래스를 삭제함.
 
+   1. MySql을 통한 선착순 쿠폰 발급 로직 작성
+      - API서버 수평 확장(scale out)으로 부하 분산
+      - Database Server 병목의 경우 캐시(Redis), 데이터 베이스 서버 확장(master, slave), 샤딩 등
+   2. Redis를 통한 선착순 쿠폰 발급 로직 작성
+   3. 쿠폰 발급 동시성 문제(순차적 처리) -> Lock 적용
+      - synchronized키워드는 자바에 종속적, 여러 서버로 확장이 되는 순간 lock이 제대로 동작되지 않음.(lock획득을 트랜잭션 시작 전에,lock 반납을 트랜잭션 커밋 후에)
+
+   docker 환경에서 locust를 통한 local 백엔드 서버의 부하 테스트 진행.
+   - ``` docker-compose up -d --scale worker= [n] ```을 통해 각 worker container에 locust cpu 사용량 분담.

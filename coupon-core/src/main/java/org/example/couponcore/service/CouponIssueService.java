@@ -34,8 +34,9 @@ public class CouponIssueService {
         Coupon coupon = findCoupon(couponId);
         coupon.issue();
         saveCouponIssue(couponId, userId);
-
     }
+
+
 
     /**
      * 쿠폰이 DB에 있는지 확인
