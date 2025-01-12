@@ -50,6 +50,12 @@ public class CouponIssueService {
                 () -> new CouponIssueException(COUPON_NOT_EXIST, "쿠폰 정책이 존재하지 않습니다. %s".formatted(couponId)));
     }
 
+    public Coupon findCoupon(long couponId) {
+        // coupon lock 적용
+        return couponJpaRepository.findById(couponId).orElseThrow(
+                () -> new CouponIssueException(COUPON_NOT_EXIST, "쿠폰 정책이 존재하지 않습니다. %s".formatted(couponId)));
+    }
+
 
     /**
      * 유저가 쿠폰을 발급 받았다는것을 저장

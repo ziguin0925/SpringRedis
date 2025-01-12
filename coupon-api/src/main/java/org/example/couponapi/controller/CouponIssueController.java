@@ -21,4 +21,12 @@ public class CouponIssueController {
         // 발급에 실패하면 exception이 반환되므로 true만 넘겨줌.
         return new CouponIssueResponseDto(true, null);
     }
+
+    @PostMapping("/v1/issue-async")
+    public CouponIssueResponseDto asyncIssueV1(@RequestBody CouponIssueRequestDto body){
+        couponIssueRequestService.asyncIssueRequestV1(body);
+
+        // 발급에 실패하면 exception이 반환되므로 true만 넘겨줌.
+        return new CouponIssueResponseDto(true, null);
+    }
 }
