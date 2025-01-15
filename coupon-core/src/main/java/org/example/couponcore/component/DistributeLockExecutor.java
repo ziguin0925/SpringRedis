@@ -18,7 +18,8 @@ public class DistributeLockExecutor {
         try {
             boolean isLocked = lock.tryLock(waitMilliSecond, leaseMilliSecond, TimeUnit.MILLISECONDS);
 
-            //lock획득에 실패하면 예외처리
+            // lock획득에 실패하면 예외처리
+            // 너무 많은 동시성 요청이 오면 lock획득 실패 예외가 던져짐.
             if (!isLocked) {
                 throw new IllegalArgumentException("[" + lockName + "] lock 획득 실패");
             }

@@ -2,6 +2,7 @@ package org.example.couponcore.config;
 
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -15,10 +16,12 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @RequiredArgsConstructor
 public class CacheConfiguration {
 
+    //@EnableCaching 애너테이션 메인 메서드에 추가하기.
+
     private final RedisConnectionFactory redisConnectionFactory;
 
     @Bean
-    public RedisCacheManager redisCacheManager() {
+    public CacheManager redisCacheManager() {
         RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()))
