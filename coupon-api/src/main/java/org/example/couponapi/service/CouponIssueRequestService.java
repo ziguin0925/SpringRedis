@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.couponapi.controller.dto.CouponIssueRequestDto;
 import org.example.couponcore.service.AsyncCouponIssueServiceV1;
+import org.example.couponcore.service.AsyncCouponIssueServiceV2;
 import org.example.couponcore.service.CouponIssueService;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 public class CouponIssueRequestService {
     private final CouponIssueService couponIssueService;
     private final AsyncCouponIssueServiceV1 asyncCouponIssueServiceV1;
+    private final AsyncCouponIssueServiceV2 asyncCouponIssueServiceV2;
 
      /*
     * lock획득
@@ -45,6 +47,10 @@ public class CouponIssueRequestService {
 
     public void asyncIssueRequestV1(CouponIssueRequestDto requestDto){
         asyncCouponIssueServiceV1.issue(requestDto.couponId(), requestDto.userId());
+    }
+
+    public void asyncIssueRequestV2(CouponIssueRequestDto requestDto){
+        asyncCouponIssueServiceV2.issue(requestDto.couponId(), requestDto.userId());
     }
 
 }

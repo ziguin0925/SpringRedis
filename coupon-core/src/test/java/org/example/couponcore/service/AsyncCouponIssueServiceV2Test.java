@@ -26,11 +26,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-class AsyncCouponIssueServiceV1Test extends TestConfig {
+
+class AsyncCouponIssueServiceV2Test extends TestConfig {
 
     // test에서 테스트하고자 하는 주요 대상이 되는 Unit을 sut라고 함.
     @Autowired
-    AsyncCouponIssueServiceV1 sut;
+    AsyncCouponIssueServiceV2 sut;
 
     @Autowired
     RedisTemplate<String, String> redisTemplate;

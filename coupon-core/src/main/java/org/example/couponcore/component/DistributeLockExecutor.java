@@ -20,6 +20,7 @@ public class DistributeLockExecutor {
 
             // lock획득에 실패하면 예외처리
             // 너무 많은 동시성 요청이 오면 lock획득 실패 예외가 던져짐.
+            // 이유 : lock을 걸고 해제하는 과정이 처리량을 떨어뜨림.
             if (!isLocked) {
                 throw new IllegalArgumentException("[" + lockName + "] lock 획득 실패");
             }
