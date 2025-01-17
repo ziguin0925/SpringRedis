@@ -51,7 +51,7 @@ coupon-core모듈은 coupon-api, coupon-consumer에서 import하기 때문에 co
 docker 환경에서 locust를 통한 local 백엔드 서버의 부하 테스트 진행.
 - ``` docker-compose up -d --scale worker= [n] ```을 통해 각 worker container에 locust cpu 사용량 분담.
 
-## 동시성 제어 성능 test
+#### 동시성 제어 성능 test
 Locust { Number of Users = 1000, Ramp up = 100 }
 ```angular2html
 [동시성 제어 방법] : [RPS]
