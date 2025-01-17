@@ -8,6 +8,9 @@ public class CouponRedisUtils {
 
     }
 
+    /**
+     * 대기열 Queue의 Key
+     * */
     public static String getIssueRequestQueueKey() {
         return "issue:request";
 

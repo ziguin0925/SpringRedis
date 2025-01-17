@@ -7,9 +7,11 @@ import lombok.RequiredArgsConstructor;
 import org.example.couponcore.exception.CouponIssueException;
 import org.example.couponcore.model.Coupon;
 import org.example.couponcore.model.CouponIssue;
+import org.example.couponcore.model.event.CouponIssueCompleteEvent;
 import org.example.couponcore.repository.mysql.CouponIssueJpaRepository;
 import org.example.couponcore.repository.mysql.CouponIssueRepository;
 import org.example.couponcore.repository.mysql.CouponJpaRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +22,7 @@ public class CouponIssueService {
     private final CouponIssueRepository couponIssueRepository;
     private final CouponIssueJpaRepository couponIssueJpaRepository;
     private final CouponJpaRepository couponJpaRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
 
 
@@ -34,6 +37,9 @@ public class CouponIssueService {
         Coupon coupon = findCouponWithLock(couponId);
         coupon.issue();
         saveCouponIssue(couponId, userId);
+
+        // 어플리케이션 내부에서 이벤트를 발행
+        publishCouponEvent(coupon);
     }
 
 
@@ -82,6 +88,25 @@ public class CouponIssueService {
         if (issue != null) {
             throw new CouponIssueException(DUPLICATED_COUPON_ISSUE,
                     "이미 발급된 쿠폰 입니다. user_id : %s, coupon_id : %s".formatted(userId, couponId));
+        }
+    }
+
+    /**
+     * 쿠폰 발급 완료가 되었을때 이벤트 발생
+     * */
+    private void publishCouponEvent(Coupon coupon) {
+
+        // 발급 수량이 모두 소진된 케이스 or 발급 기간이 지난 케이스
+        if(coupon.isIssueComplete()){
+            // 발급이 모두 된 경우
+            eventPublisher.publishEvent(new CouponIssueCompleteEvent(coupon.getId()));
+
+            /*
+            * 발급이 모두 되면 redis와 local cache를 삭제 업데이트(put)
+            * -> 다음 요청에서 localCache와 redis는 database로 부터 읽어옴.
+            * -> CouponRedisEntity의 availableIssueQuantity가 false가 됨.
+            * ->
+            * */
         }
     }
 }

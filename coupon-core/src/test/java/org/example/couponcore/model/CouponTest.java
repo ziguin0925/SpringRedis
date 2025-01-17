@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import java.time.LocalDateTime;
 import org.example.couponcore.exception.CouponIssueException;
 import org.example.couponcore.exception.ErrorCode;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -175,5 +176,58 @@ class CouponTest {
                     assertThat(ex.getErrorCode()).isEqualTo(ErrorCode.INVALID_COUPON_ISSUE_DATE);
                 });
     }
+
+
+    @Test
+    @DisplayName("발급 기간이 종료되면 true를 반환한다.")
+    void isIssuedComplete_1() {
+        Coupon coupon = Coupon.builder()
+                .totalQuantity(100)
+                .issuedQuantity(0)
+                .dateIssueStart(LocalDateTime.now().minusDays(2))
+                .dateIssueEnd(LocalDateTime.now().minusDays(1))
+                .build();
+
+        // when
+        boolean result = coupon.isIssueComplete();
+
+        // then
+        Assertions.assertTrue(result);
+    }
+
+    @Test
+    @DisplayName("잔여 발급 가능 수량이 없다면 true를 반환한다.")
+    void isIssuedComplete_2() {
+        Coupon coupon = Coupon.builder()
+                .totalQuantity(100)
+                .issuedQuantity(100)
+                .dateIssueStart(LocalDateTime.now().minusDays(2))
+                .dateIssueEnd(LocalDateTime.now().plusDays(1))
+                .build();
+
+        // when
+        boolean result = coupon.isIssueComplete();
+
+        // then
+        Assertions.assertTrue(result);
+    }
+
+    @Test
+    @DisplayName("발급 기한과 수량이 유효하면 false를 반환한다.")
+    void isIssuedComplete_3() {
+        Coupon coupon = Coupon.builder()
+                .totalQuantity(100)
+                .issuedQuantity(0)
+                .dateIssueStart(LocalDateTime.now().minusDays(2))
+                .dateIssueEnd(LocalDateTime.now().plusDays(1))
+                .build();
+
+        // when
+        boolean result = coupon.isIssueComplete();
+
+        // then
+        Assertions.assertFalse(result);
+    }
+
 
 }

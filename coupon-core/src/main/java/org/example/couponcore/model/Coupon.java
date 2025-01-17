@@ -54,7 +54,7 @@ public class Coupon extends BaseTimeEntity {
     @Column(nullable = false)
     private LocalDateTime dateIssueEnd;
 
-    // 수량 검증
+    // 수량 검증 : 발급해도 되면 true
     public boolean availableIssueQuantity(){
 
         // 발급 되어야 할 수량이 없다면.
@@ -71,6 +71,12 @@ public class Coupon extends BaseTimeEntity {
 
 
         return dateIssueStart.isBefore(now) && dateIssueEnd.isAfter(now);
+    }
+
+    // 발급 기간이 지났는지, 발급 가능 수량이 맞는지
+    public boolean isIssueComplete(){
+        LocalDateTime now = LocalDateTime.now();
+        return dateIssueEnd.isBefore(now) || !availableIssueQuantity();
     }
 
 

@@ -30,6 +30,7 @@ dependencies {
     implementation 'org.redisson:redisson-spring-boot-starter:3.16.4' // redis 분산 lock
     implementation 'com.fasterxml.jackson.core:jackson-databind'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    implementation 'com.github.ben-manes.caffeine:caffeine' // 로컬 캐시 적용
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 

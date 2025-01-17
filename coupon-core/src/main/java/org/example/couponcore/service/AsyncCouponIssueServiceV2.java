@@ -12,10 +12,15 @@ public class AsyncCouponIssueServiceV2 {
     private final CouponCacheService couponCacheService;
 
 
+    /**
+     * 요청이 오면 Redis에만 저장함.
+     * Redis Sets, Lists(대기열 queue)에 저장됨.
+     * 실제 대기열 queue에 저장된 유저에대해 쿠폰을 발급해주는 것은 scheduler를 통해 실행됨.
+     * */
     public void issue(long couponId, long userId) {
 
         // 쿠폰 존재 여부 확인(캐시를 통해 확인)
-        CouponRedisEntity coupon = couponCacheService.getCouponCache(couponId);
+        CouponRedisEntity coupon = couponCacheService.getCouponLocalCache(couponId);
 
         // 쿠폰 날짜 유효성 확인.
         coupon.checkIssuableCoupon();

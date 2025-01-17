@@ -31,12 +31,16 @@ public class CouponIssueListener {
     @Scheduled(fixedRate = 1000)
     public void issue() throws JsonProcessingException {
       log.info("listen...");
-      while(existCouponIssueTarget()){
-          CouponIssueRequest target = getIssueTarget();
-          log.info("발급 시작 : %s".formatted(target));
-          couponIssueService.issue(target.couponId(), target.userId());
-          log.info("발급 완료 target : %s".formatted(target));
 
+      // 대기열 queue에 유저가 있다면.
+      while(existCouponIssueTarget()){
+
+          CouponIssueRequest target = getIssueTarget();
+
+          // 쿠폰 발급 시작
+          couponIssueService.issue(target.couponId(), target.userId());
+
+          // 발급 완료 후 해당 큐에서 첫 번째 유저 삭제
           removeCouponIssueTarget();
       }
     }
@@ -46,11 +50,15 @@ public class CouponIssueListener {
         return redisRepository.lSize(issueRequestQueueKey) > 0;
     }
 
-    // redis로부터 대기열 queue의 첫번째 인덱스 유저를 가지고 오기.
+    /**
+     * redis로부터 대기열 queue의 첫번째 인덱스 유저를 가지고 오기.
+     */
     private CouponIssueRequest getIssueTarget() throws JsonProcessingException {
         return objectMapper.readValue(redisRepository.lIndex(issueRequestQueueKey, 0), CouponIssueRequest.class);
     }
-
+    /**
+     * redis로부터 대기열 queue의 첫번째 인덱스 유저를 가지고 오기.
+     */
     private void removeCouponIssueTarget(){
         redisRepository.lPop(issueRequestQueueKey);
     }
