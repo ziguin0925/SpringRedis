@@ -13,10 +13,11 @@ Docker 기본 지식 공부
 
  사용자가 target홈페이지를 접속할 때 대기 페이지에서 대기를 하다가 허용이 되면 target홈페이지로 접속하는 서비스 작성.
 
+### 학습 내용
  - 비동기 처리를 통해 대량의 요청에 대응하기 위한 Webflux사용 
  - In-memory기반의 Redis를 통한 대기열 관리
  - Jmeter를 통한 성능 테스트 진행
- - docker 내부에서 shell을 통한 대기열, 진행열 redis queue 확인
+ - docker 내부에서 shell을 통한 대기열, 진행열 Redis Queue 확인
  ```
  while [ true ];
  do date;
@@ -35,12 +36,17 @@ Docker 기본 지식 공부
 
 coupon-core모듈은 coupon-api, coupon-consumer에서 import하기 때문에 coupon-core의 main메서드 클래스를 삭제함.
 
+### 학습 내용
 1. MySql을 통한 선착순 쿠폰 발급 로직 작성
    - API서버 수평 확장(scale out)으로 부하 분산
    - Database Server 병목의 경우 캐시(Redis), 데이터 베이스 서버 확장(master, slave), 샤딩 등
    
 
 2. Redis를 통한 선착순 쿠폰 발급 로직 작성
+   - 유저의 요청은 coupon-api에서 처리 - Redis Sets, List로 발급량, 대기열 제어.
+   - Redis Script로 쿠폰 유효성(발급 수량, 발급 유효 기간, 중복 발급) 검사 진행.
+   - Caffeine(LocalCache)을 이용하여 Redis 네트워크 비용 절감.
+   - CouponConsumer에서 Scheduler를 통해 DB 업데이트, 동시성 제어를 위해 x-lock 사용.
 
 
 3. 쿠폰 발급 동시성 문제(순차적 처리) -> Lock 적용
@@ -48,10 +54,18 @@ coupon-core모듈은 coupon-api, coupon-consumer에서 import하기 때문에 co
    - Redisson을 이용한 lock 로직 구현(lockName으로 lock을 검), Redis Script를 이용하여 동시성 제어.
    - MySQL for update를 통한 **record lock** 사용 (x-lock) : @Lock(LockModeType.PESSIMISTIC_WRITE)
 
-docker 환경에서 locust를 통한 local 백엔드 서버의 부하 테스트 진행.
-- ``` docker-compose up -d --scale worker= [n] ```을 통해 각 worker container에 locust cpu 사용량 분담.
 
-#### 동시성 제어 성능 test
+4. docker에서 locust를 사용하여 local 백엔드 서버의 부하 테스트 진행.
+   - ``` docker-compose up -d --scale worker= [n] ```을 통해 각 worker container에 locust cpu 사용량 분담.
+
+
+5. 서버 배포 및 서버 모니터링.
+   - implementation  'org.springframework.boot:spring-boot-starter-actuator'
+   - implementation  'io.micrometer:micrometer-registry-prometheus'
+   <br> -> 지속적으로 요청을 보내어 확인.(grafana 4701번 dashboard 사용)
+   <br> -> AWS 서버 배포 후 CloudWatch를 통해 서버의 부하 모니터링
+
+### 동시성 제어 성능 Test
 Locust { Number of Users = 1000, Ramp up = 100 }
 ```angular2html
 [동시성 제어 방법] : [RPS]
@@ -59,4 +73,5 @@ MySQL : 400
 Redisson lock : 800
 Redis Script : 6000
 ```
+
 
