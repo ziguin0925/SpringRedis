@@ -1,4 +1,4 @@
 rootProject.name = 'SpringRedis'
 
 
-include("waiting-api", "coupon-core", "coupon-api", "coupon-consumer")
+include("waiting-api", "coupon-core", "coupon-api", "coupon-consumer", "price-compare-redis")
