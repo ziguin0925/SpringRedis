@@ -73,16 +73,16 @@ public class LowestPriceServiceImpl implements LowestPriceService {
         List<ProductGroup> tempProductGroup = getProductGroupByKeyword(keyword);
 
         // 가져온 정보들을 Return할 Object에 넣기
+        returnInfo.setKeyword(keyword);
+        returnInfo.setProductGroupList(tempProductGroup);
 
         // 해당 Object return
-
         return returnInfo;
     }
 
     private List<ProductGroup> getProductGroupByKeyword(String keyword) {
         List<ProductGroup> returnProductGroupList = new ArrayList<>();
         ProductGroup tempProductGroup = new ProductGroup();
-        Product tempProduct = new Product();
 
         // Input 받은 keyword로 productGroupId 조회
         // Set을 List형태로 변경
@@ -106,9 +106,11 @@ public class LowestPriceServiceImpl implements LowestPriceService {
                 Map<String, String> productPriceMap =  mapper.convertValue(productPriceObjects.next(), Map.class);
 
 
+                Product tempProduct = new Product();
                 // Product Object bind하기.
-                tempProduct.setProductId(productPriceMap.get("value")); // productId
+                tempProduct.setProductId(productPriceMap.get("value")); // productId (productPriceMap Map에서의 key값.)
                 tempProduct.setPrice(Double.valueOf(productPriceMap.get("score")).intValue()); // score
+                tempProduct.setProductGroupId(productGroupId);
 
                 tempProductList.add(tempProduct);
             }

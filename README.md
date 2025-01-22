@@ -74,4 +74,11 @@ Redisson lock : 800
 Redis Script : 6000
 ```
 
-
+## 3. 최저가 서비스 (Redis 명령어 및 Zset)
+   상품과 상품 그룹, 키워드를 vo로 하여 간단한 서비스 로직 작성. 
+   <br>Redis Master-Slave, Sentinel, Cluster 구조 설정 실습 및 Stress Test.
+   - Redis benchmark를 이용한 Stress Test
+   - Redis 장애 주요 case에 따른 대응
+      1. Master-Replica전환 후 Client의 인식 : library내 topology update 수행
+      2. full sync 실패로 인한 장애 유발 : client-output-buffer-limit slave 수정
+      3. 통신 불가로 인한 Buffer증가, 데이터 삭제 : client-output-buffer-limit normal 수정
