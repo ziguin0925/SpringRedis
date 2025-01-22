@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class Product {
+    private String productGroupId;
     private String productId; // d1fc1031-....
     private int price; // 25000
 
